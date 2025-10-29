@@ -35,7 +35,13 @@ func (t *Tokenizer) NextToken() token.Token {
 
 	switch t.ch {
 	case '=':
-		tok = newToken(token.ASSIGN, t.ch)
+		if t.peekNextChar() == '=' {
+			firstCh := t.ch
+			t.readChar()
+			tok = token.Token{Type: token.EQ, Literal: string(firstCh) + string(t.ch)}
+		} else {
+			tok = newToken(token.ASSIGN, t.ch)
+		}
 	case ';':
 		tok = newToken(token.SEMICOLON, t.ch)
 	case '(':
@@ -51,7 +57,13 @@ func (t *Tokenizer) NextToken() token.Token {
 	case '+':
 		tok = newToken(token.PLUS, t.ch)
 	case '!':
-		tok = newToken(token.BANG, t.ch)
+		if t.peekNextChar() == '=' {
+			firstCh := t.ch
+			t.readChar()
+			tok = token.Token{Type: token.NOT_EQ, Literal: string(firstCh) + string(t.ch)}
+		} else {
+			tok = newToken(token.BANG, t.ch)
+		}
 	case '-':
 		tok = newToken(token.MINUS, t.ch)
 	case '/':
@@ -117,4 +129,11 @@ func (t *Tokenizer) readNumber() string {
 		t.readChar()
 	}
 	return t.input[pos:t.position]
+}
+
+func (t *Tokenizer) peekNextChar() byte {
+	if t.readPosition >= len(t.input) {
+		return 0
+	}
+	return t.input[t.readPosition]
 }
