@@ -50,6 +50,18 @@ func (t *Tokenizer) NextToken() token.Token {
 		tok = newToken(token.COMMA, t.ch)
 	case '+':
 		tok = newToken(token.PLUS, t.ch)
+	case '!':
+		tok = newToken(token.BANG, t.ch)
+	case '-':
+		tok = newToken(token.MINUS, t.ch)
+	case '/':
+		tok = newToken(token.SLASH, t.ch)
+	case '*':
+		tok = newToken(token.ASTERISK, t.ch)
+	case '<':
+		tok = newToken(token.LESS_THAN, t.ch)
+	case '>':
+		tok = newToken(token.GREATER_THAN, t.ch)
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
